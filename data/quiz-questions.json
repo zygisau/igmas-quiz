@@ -2,35 +2,56 @@
   "questions": [
     {
       "id": 1,
-      "question": "What's the capital of the Moon?",
+      "question": "Praeitų metų sveikinimo video 10-asis LR prezidentas Gitanas Nausėda kreipėsi į savo avis elektoratą siekdamas pasveikinti gerb. Igną Dailydę su jo gimimo diena. Koks skaičius skirtingų rasių matomas minioje?",
       "type": "multiple-choice",
-      "options": ["Cheese City", "Crater Town", "Luna Landing", "Moon Base Alpha"],
-      "correctAnswer": 0
+      "options": [
+        "5",
+        "4",
+        "Aerobybys",
+        "3"
+      ],
+      "correctAnswer": 3
     },
     {
       "id": 2,
-      "question": "Is TypeScript a superset of JavaScript?",
-      "type": "true-false",
-      "correctAnswer": true
-    },
-    {
-      "id": 3,
-      "question": "How many fingers does a cartoon character usually have?",
-      "type": "multiple-choice",
-      "options": ["Three", "Four", "Five", "It depends on the artist's mood"],
+      "question": "Ką tokio simpatiško pamatė šis vyras?",
+      "type": "image-multiple-choice",
+      "imageUrl": "/mazetis.jpg",
+      "options": [
+        "Miliauskaitės pėdkelnes",
+        "Simpatiškas eilutes",
+        "Gytautėlę"
+      ],
       "correctAnswer": 1
     },
     {
+      "id": 3,
+      "question": "Didžiausio Sandrutės Simp'o pavardė?",
+      "type": "multiple-choice",
+      "options": [
+        "Dailydė",
+        "Dailidė",
+        "Igbas",
+        "Ptakauskas"
+      ],
+      "correctAnswer": 3
+    },
+    {
       "id": 4,
-      "question": "React is a JavaScript library for building user interfaces.",
+      "question": "Dukynas pabaigė?",
       "type": "true-false",
-      "correctAnswer": true
+      "correctAnswer": false
     },
     {
       "id": 5,
       "question": "What do you call a bear with no teeth?",
       "type": "multiple-choice",
-      "options": ["A teddy bear", "A gummy bear", "A grumpy bear", "A confused bear"],
+      "options": [
+        "A teddy bear",
+        "A gummy bear",
+        "A grumpy bear",
+        "A confused bear"
+      ],
       "correctAnswer": 1
     },
     {
@@ -43,7 +64,12 @@
       "id": 7,
       "question": "If you could only eat one food forever, which would make you regret it fastest?",
       "type": "multiple-choice",
-      "options": ["Pizza", "Ice cream", "Brussels sprouts", "Ghost peppers"],
+      "options": [
+        "Pizza",
+        "Ice cream",
+        "Brussels sprouts",
+        "Ghost peppers"
+      ],
       "correctAnswer": 3
     },
     {

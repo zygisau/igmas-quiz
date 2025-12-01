@@ -3,6 +3,7 @@ import { ClientQuestion } from "@/types/quiz";
 import { getQuestionRenderer } from "@/components/questions/questionFactory";
 import { CorrectFeedback } from "@/components/CorrectFeedback";
 import { IncorrectFeedback } from "@/components/IncorrectFeedback";
+import { useState, useEffect } from "react";
 
 type Answer = number | boolean;
 
@@ -29,6 +30,26 @@ export const QuizCard = ({
   showingFeedback = false,
   isCorrect = null,
 }: QuizCardProps) => {
+  const [delayExpired, setDelayExpired] = useState(false);
+
+  // Enable proceed button after 3 seconds when feedback is showing
+  useEffect(() => {
+    if (!showingFeedback) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setDelayExpired(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+      setDelayExpired(false);
+    };
+  }, [showingFeedback]);
+
+  const canProceed = !showingFeedback || delayExpired;
+
   const renderQuestion = () => {
     const QuestionComponent = getQuestionRenderer(question);
     return (
@@ -71,7 +92,7 @@ export const QuizCard = ({
       <div className="flex justify-center">
         <Button
           onClick={onNext}
-          disabled={selectedAnswer === undefined || isValidating}
+          disabled={selectedAnswer === undefined || isValidating || !canProceed}
           className="sketch-border bg-accent hover:bg-accent/80 text-accent-foreground font-sketch text-xl px-8 py-6 animate-wobble disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isValidating

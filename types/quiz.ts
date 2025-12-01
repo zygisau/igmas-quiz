@@ -1,4 +1,4 @@
-export type QuestionType = 'multiple-choice' | 'true-false';
+export type QuestionType = 'multiple-choice' | 'true-false' | 'image-multiple-choice';
 
 export interface BaseQuestion {
   id: number;
@@ -17,7 +17,14 @@ export interface TrueFalseQuestion extends BaseQuestion {
   correctAnswer: boolean;
 }
 
-export type Question = MultipleChoiceQuestion | TrueFalseQuestion;
+export interface ImageMultipleChoiceQuestion extends BaseQuestion {
+  type: 'image-multiple-choice';
+  imageUrl: string;
+  options: string[];
+  correctAnswer: number;
+}
+
+export type Question = MultipleChoiceQuestion | TrueFalseQuestion | ImageMultipleChoiceQuestion;
 
 export interface QuizData {
   questions: Question[];
@@ -33,7 +40,13 @@ export interface ClientTrueFalseQuestion extends BaseQuestion {
   type: 'true-false';
 }
 
-export type ClientQuestion = ClientMultipleChoiceQuestion | ClientTrueFalseQuestion;
+export interface ClientImageMultipleChoiceQuestion extends BaseQuestion {
+  type: 'image-multiple-choice';
+  imageUrl: string;
+  options: string[];
+}
+
+export type ClientQuestion = ClientMultipleChoiceQuestion | ClientTrueFalseQuestion | ClientImageMultipleChoiceQuestion;
 
 // Answer validation types
 export interface AnswerValidationRequest {
