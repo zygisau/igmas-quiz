@@ -22,6 +22,8 @@ export default function Home() {
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(true);
   const [validating, setValidating] = useState(false);
+  const [showingFeedback, setShowingFeedback] = useState(false);
+  const [lastValidationResult, setLastValidationResult] = useState<boolean | null>(null);
 
   // Fetch quiz metadata on mount
   useEffect(() => {
@@ -70,6 +72,22 @@ export default function Home() {
   const handleNext = async () => {
     if (!currentQuestion || selectedAnswer === undefined || validating) return;
 
+    // If we're showing feedback, move to next question
+    if (showingFeedback) {
+      setShowingFeedback(false);
+      setLastValidationResult(null);
+
+      // Move to next question or show results
+      if (currentQuestionIndex < questionIds.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedAnswer(undefined);
+      } else {
+        setShowResults(true);
+      }
+      return;
+    }
+
+    // First click: validate and show feedback
     setValidating(true);
 
     try {
@@ -97,13 +115,9 @@ export default function Home() {
         return [...filtered, newRecord];
       });
 
-      // Move to next question or show results
-      if (currentQuestionIndex < questionIds.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setSelectedAnswer(undefined);
-      } else {
-        setShowResults(true);
-      }
+      // Show feedback instead of immediately advancing
+      setLastValidationResult(validation.isCorrect);
+      setShowingFeedback(true);
     } catch (error) {
       console.error('Failed to validate answer:', error);
     } finally {
@@ -149,6 +163,8 @@ export default function Home() {
             onSelectAnswer={handleAnswer}
             onNext={handleNext}
             isValidating={validating}
+            showingFeedback={showingFeedback}
+            isCorrect={lastValidationResult}
           />
         ) : showResults ? (
           <QuizResults

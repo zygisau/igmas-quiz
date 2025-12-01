@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ClientQuestion } from "@/types/quiz";
 import { getQuestionRenderer } from "@/components/questions/questionFactory";
+import { CorrectFeedback } from "@/components/CorrectFeedback";
+import { IncorrectFeedback } from "@/components/IncorrectFeedback";
 
 type Answer = number | boolean;
 
@@ -12,6 +14,8 @@ interface QuizCardProps {
   onSelectAnswer: (answer: Answer) => void;
   onNext: () => void;
   isValidating?: boolean;
+  showingFeedback?: boolean;
+  isCorrect?: boolean | null;
 }
 
 export const QuizCard = ({
@@ -22,6 +26,8 @@ export const QuizCard = ({
   onSelectAnswer,
   onNext,
   isValidating = false,
+  showingFeedback = false,
+  isCorrect = null,
 }: QuizCardProps) => {
   const renderQuestion = () => {
     const QuestionComponent = getQuestionRenderer(question);
@@ -55,6 +61,11 @@ export const QuizCard = ({
         {renderQuestion()}
       </div>
 
+      {/* Feedback message */}
+      {showingFeedback && isCorrect !== null && (
+        isCorrect ? <CorrectFeedback /> : <IncorrectFeedback />
+      )}
+
       {/* Next button */}
       <div className="flex justify-center">
         <Button
@@ -64,8 +75,10 @@ export const QuizCard = ({
         >
           {isValidating
             ? "Checking..."
-            : questionNumber === totalQuestions
-              ? "See Results!"
+            : showingFeedback
+              ? questionNumber === totalQuestions
+                ? "See Results!"
+                : "Continue →"
               : "Next →"}
         </Button>
       </div>
