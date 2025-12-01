@@ -2,15 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
+import Image from "next/image";
 import { AudioDenialPage } from "./AudioDenialPage";
 
 export const BackgroundMusic = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const spookAudioRef = useRef<HTMLAudioElement>(null);
   const [volume, setVolume] = useState(100);
   const [showSlider, setShowSlider] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [shake, setShake] = useState(false);
   const [audioDenied, setAudioDenied] = useState(false);
+  const [showSpook, setShowSpook] = useState(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -34,10 +37,19 @@ export const BackgroundMusic = () => {
 
   const handleVolumeChange = (newVolume: number) => {
     if (newVolume === 0) {
-      // User tried to mute - FUCK YOU!
+      // User tried to mute - trigger spook!
       setShake(true);
       setShowPopover(true);
+      setShowSpook(true);
       setVolume(100);
+
+      // Play spook audio
+      if (spookAudioRef.current) {
+        spookAudioRef.current.currentTime = 0;
+        spookAudioRef.current.play().catch((error) => {
+          console.error("Failed to play spook audio:", error);
+        });
+      }
 
       setTimeout(() => {
         setShake(false);
@@ -46,6 +58,11 @@ export const BackgroundMusic = () => {
       setTimeout(() => {
         setShowPopover(false);
       }, 2000);
+
+      // Hide spook image after 3 seconds
+      setTimeout(() => {
+        setShowSpook(false);
+      }, 3000);
     } else {
       setVolume(newVolume);
     }
@@ -58,6 +75,7 @@ export const BackgroundMusic = () => {
   return (
     <>
       <audio ref={audioRef} src="/background.mp3" />
+      <audio ref={spookAudioRef} src="/spook.mp3" />
 
       {/* Volume Control Button */}
       <div className="fixed bottom-6 right-6 z-50">
@@ -98,6 +116,19 @@ export const BackgroundMusic = () => {
         )}
       </div>
 
+      {/* Spook Image Overlay */}
+      {showSpook && (
+        <div className="fixed inset-0 z-[100] animate-shake">
+          <Image
+            src="/spook.webp"
+            alt="Spook"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
+
       {/* Shake Animation */}
       {shake && (
         <style jsx global>{`
@@ -108,6 +139,27 @@ export const BackgroundMusic = () => {
           }
           body {
             animation: shake 0.5s;
+          }
+        `}</style>
+      )}
+
+      {/* Spook Shake Animation for Image */}
+      {showSpook && (
+        <style jsx>{`
+          @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-10px, -10px) rotate(-5deg); }
+            20% { transform: translate(10px, 10px) rotate(5deg); }
+            30% { transform: translate(-10px, 10px) rotate(-5deg); }
+            40% { transform: translate(10px, -10px) rotate(5deg); }
+            50% { transform: translate(-10px, -10px) rotate(-5deg); }
+            60% { transform: translate(10px, 10px) rotate(5deg); }
+            70% { transform: translate(-10px, 10px) rotate(-5deg); }
+            80% { transform: translate(10px, -10px) rotate(5deg); }
+            90% { transform: translate(-10px, -10px) rotate(-5deg); }
+          }
+          .animate-shake {
+            animation: shake 0.5s infinite;
           }
         `}</style>
       )}
