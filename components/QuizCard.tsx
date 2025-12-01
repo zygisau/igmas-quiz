@@ -73,9 +73,12 @@ export const QuizCard = ({
 
       {/* Question text */}
       <div className="sketch-border bg-secondary p-6 mb-8 animate-float-delayed">
-        <h2 className="text-2xl md:text-3xl font-sketch text-center text-foreground leading-relaxed">
-          {question.question}
-        </h2>
+        <h2 
+          className="text-2xl md:text-3xl font-sketch text-center text-foreground leading-relaxed"
+          dangerouslySetInnerHTML={{
+            __html: question.question.replace(/avis/gi, '<span style="text-decoration: line-through;">avis</span>')
+          }}
+        />
       </div>
 
       {/* Question component based on type */}

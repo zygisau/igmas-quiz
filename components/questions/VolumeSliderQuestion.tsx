@@ -1,5 +1,7 @@
 "use client";
 
+import { createPortal } from "react-dom";
+import Image from "next/image";
 import { ClientVolumeSliderQuestion } from "@/types/quiz";
 import { QuestionRendererProps } from "./QuestionRenderer";
 import { useAudioManagement, volumeSchema } from "@/components/BackgroundMusic";
@@ -10,7 +12,7 @@ export const VolumeSliderQuestion = ({
   onSelectAnswer,
   isDisabled = false,
 }: QuestionRendererProps<ClientVolumeSliderQuestion>) => {
-  const { volume, handleVolumeChange, showPopover, shake, showSpook, audioRef, spookAudioRef } =
+  const { volume, handleVolumeChange, shake, showSpook, audioRef, spookAudioRef } =
     useAudioManagement();
 
   const handleSliderChange = (newVolume: number) => {
@@ -20,7 +22,11 @@ export const VolumeSliderQuestion = ({
       handleVolumeChange(newVolume);
       // Update the answer
       if (!isDisabled) {
-        onSelectAnswer(newVolume);
+        if (newVolume === 0) {
+          onSelectAnswer(0);
+        } else {
+          onSelectAnswer(newVolume);
+        }
       }
     }
   };
@@ -66,14 +72,21 @@ export const VolumeSliderQuestion = ({
             )}
           </div>
         </div>
-
-        {/* "FUCK YOU" Popover */}
-        {showPopover && (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sketch-border bg-red-500 text-white p-6 rounded-lg shadow-xl animate-bounce">
-            <p className="text-4xl font-sketch font-bold">FUCK YOU</p>
-          </div>
-        )}
       </div>
+
+      {/* Spook Image Overlay */}
+      {typeof document !== 'undefined' && showSpook && createPortal(
+        <div className="fixed inset-0 z-[100] animate-shake">
+          <Image
+            src="/spook.webp"
+            alt="Spook"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>,
+        document.body
+      )}
 
       {/* Shake Animation */}
       {shake && (

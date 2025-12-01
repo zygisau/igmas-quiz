@@ -16,7 +16,7 @@
       "id": 2,
       "question": "Ką tokio simpatiško pamatė šis vyras?",
       "type": "image-multiple-choice",
-      "imageUrl": "/images/mazetis.jpg",
+      "imageUrl": "/mazetis.jpg",
       "options": [
         "Miliauskaitės pėdkelnes",
         "Simpatiškas eilutes",
@@ -45,7 +45,8 @@
     {
       "id": 5,
       "question": "Xujovas audijo, išjunk dwj Ignelio audyju prašau",
-      "type": "volume-slider"
+      "type": "volume-slider",
+      "correctAnswer": 0
     },
     {
       "id": 6,
@@ -69,7 +70,7 @@
         "2000-01-01T00:00:00.000Z",
         "1970-01-01T00:00:00.000Z"
       ],
-      "correctAnswer": 3
+      "correctAnswer": 2
     },
     {
       "id": 8,
@@ -85,15 +86,15 @@
     },
     {
       "id": 9,
-      "question": "What's the best way to study for a test?",
+      "question": "Kieno šiandien gimtadienis",
       "type": "multiple-choice",
       "options": [
-        "Actually study",
-        "Hope for a miracle",
-        "Panic at 3 AM",
-        "All of the above"
+        "Igno",
+        "Žygimanto",
+        "Mindaugo",
+        "Gintauto"
       ],
-      "correctAnswer": 3
+      "correctAnswer": 0
     }
   ]
 }

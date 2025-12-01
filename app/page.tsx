@@ -5,6 +5,7 @@ import Image from "next/image";
 import { QuizCard } from "@/components/QuizCard";
 import { QuizResults } from "@/components/QuizResults";
 import { ClientQuestion, QuizMetadata } from "@/types/quiz";
+import { useQuizScore } from "@/contexts/QuizScoreContext";
 
 type Answer = number | boolean;
 
@@ -25,6 +26,7 @@ export default function Home() {
   const [validating, setValidating] = useState(false);
   const [showingFeedback, setShowingFeedback] = useState(false);
   const [lastValidationResult, setLastValidationResult] = useState<boolean | null>(null);
+  const { setScore, resetScore } = useQuizScore();
 
   // Fetch quiz metadata on mount
   useEffect(() => {
@@ -83,6 +85,8 @@ export default function Home() {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedAnswer(undefined);
       } else {
+        const finalScore = calculateScore();
+        setScore(finalScore, questionIds.length);
         setShowResults(true);
       }
       return;
@@ -131,6 +135,7 @@ export default function Home() {
     setAnswerRecords([]);
     setSelectedAnswer(undefined);
     setShowResults(false);
+    resetScore();
   };
 
   const calculateScore = () => {

@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
 import Image from "next/image";
 import { AudioDenialPage } from "./AudioDenialPage";
+import { MobilePage } from "./MobilePage";
+import { useQuizScore } from "@/contexts/QuizScoreContext";
 import { z } from "zod";
 
 // Zod schema for volume state
@@ -77,28 +79,87 @@ export const BackgroundMusic = () => {
     showSpook,
     handleVolumeChange,
   } = useAudioManagement();
+  const { score, totalQuestions } = useQuizScore();
   const [showSlider, setShowSlider] = useState(false);
   const [audioDenied, setAudioDenied] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentAudioSource, setCurrentAudioSource] = useState("/background.mp3");
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ) || window.innerWidth < 768;
+      setIsMobile(isMobileDevice);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const hasResults = score !== null && totalQuestions !== null;
+  const isPerfect = score === 9 && totalQuestions === 9;
+  const audioSource = hasResults
+    ? isPerfect
+      ? "/jolanta.mp3"
+      : "/lupeikiene.mp3"
+    : "/background.mp3";
+
+  useEffect(() => {
+    if (!isMobile && audioRef.current) {
+      const currentSrc = audioRef.current.src;
+      const expectedSrc = typeof window !== 'undefined' ? `${window.location.origin}${audioSource}` : audioSource;
+      
+      if (!currentSrc || !currentSrc.includes(audioSource) || audioRef.current.paused) {
+        audioRef.current.volume = volume / 100;
+        audioRef.current.loop = true;
+        audioRef.current.src = audioSource;
+        setCurrentAudioSource(audioSource);
+        
+        const playAudio = () => {
+          audioRef.current?.play().catch((error) => {
+            console.error("Failed to play background music:", error);
+            // Check if the error is due to user denying audio
+            if (error.name === "NotAllowedError" || error.name === "NotSupportedError") {
+              setAudioDenied(true);
+            }
+          });
+        };
+        
+        audioRef.current.addEventListener('loadeddata', playAudio, { once: true });
+        audioRef.current.load();
+      }
+    }
+  }, [isMobile, audioSource, volume]);
+
+  useEffect(() => {
+    if (!isMobile && audioRef.current && audioSource !== currentAudioSource) {
+      audioRef.current.src = audioSource;
+      audioRef.current.loop = true;
+      setCurrentAudioSource(audioSource);
+      
+      const playAudio = () => {
+        audioRef.current?.play().catch((error) => {
+          console.error("Failed to play background music:", error);
+        });
+      };
+      
+      audioRef.current.addEventListener('loadeddata', playAudio, { once: true });
+      audioRef.current.load();
+    }
+  }, [audioSource, currentAudioSource, isMobile]);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
       audioRef.current.loop = true;
-      audioRef.current.play().catch((error) => {
-        console.error("Failed to play background music:", error);
-        // Check if the error is due to user denying audio
-        if (error.name === "NotAllowedError" || error.name === "NotSupportedError") {
-          setAudioDenied(true);
-        }
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
     }
   }, [volume]);
+
+  if (isMobile) {
+    return <MobilePage />;
+  }
 
   if (audioDenied) {
     return <AudioDenialPage />;
@@ -106,7 +167,7 @@ export const BackgroundMusic = () => {
 
   return (
     <>
-      <audio ref={audioRef} src="/background.mp3" />
+      <audio ref={audioRef} src={currentAudioSource} loop />
       <audio ref={spookAudioRef} src="/spook.mp3" />
 
       {/* Volume Control Button */}
