@@ -36,6 +36,7 @@ export const QuizCard = ({
         question={question}
         selectedAnswer={selectedAnswer}
         onSelectAnswer={onSelectAnswer}
+        isDisabled={showingFeedback}
       />
     );
   };

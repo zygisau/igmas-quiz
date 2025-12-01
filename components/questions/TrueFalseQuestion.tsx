@@ -4,6 +4,7 @@ import { QuestionRendererProps } from "./QuestionRenderer";
 export const TrueFalseQuestion = ({
   selectedAnswer,
   onSelectAnswer,
+  isDisabled = false,
 }: QuestionRendererProps<ClientTrueFalseQuestion>) => {
   const options = [
     { label: "True", value: true },
@@ -15,16 +16,18 @@ export const TrueFalseQuestion = ({
       {options.map((option, index) => (
         <button
           key={index}
-          onClick={() => onSelectAnswer(option.value)}
+          onClick={() => !isDisabled && onSelectAnswer(option.value)}
+          disabled={isDisabled}
           className={`
             w-full sketch-border p-6 text-center font-handwriting text-xl
             transition-all duration-200 animate-float-delayed-2
-            hover:bg-secondary hover:scale-105
+            ${!isDisabled && "hover:bg-secondary hover:scale-105"}
             ${
               selectedAnswer === option.value
                 ? "bg-primary text-primary-foreground scale-105"
                 : "bg-card text-foreground"
             }
+            ${isDisabled && "opacity-60 cursor-not-allowed"}
           `}
           style={{
             animationDelay: `${index * 0.2}s`,

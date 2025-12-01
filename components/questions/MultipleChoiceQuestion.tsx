@@ -5,22 +5,25 @@ export const MultipleChoiceQuestion = ({
   question,
   selectedAnswer,
   onSelectAnswer,
+  isDisabled = false,
 }: QuestionRendererProps<ClientMultipleChoiceQuestion>) => {
   return (
     <div className="space-y-4">
       {question.options.map((option, index) => (
         <button
           key={index}
-          onClick={() => onSelectAnswer(index)}
+          onClick={() => !isDisabled && onSelectAnswer(index)}
+          disabled={isDisabled}
           className={`
             w-full sketch-border p-4 text-left font-handwriting text-lg
             transition-all duration-200 animate-float-delayed-2
-            hover:bg-secondary hover:scale-105
+            ${!isDisabled && "hover:bg-secondary hover:scale-105"}
             ${
               selectedAnswer === index
                 ? "bg-primary text-primary-foreground scale-105"
                 : "bg-card text-foreground"
             }
+            ${isDisabled && "opacity-60 cursor-not-allowed"}
           `}
           style={{
             animationDelay: `${index * 0.2}s`,

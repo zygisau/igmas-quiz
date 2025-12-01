@@ -5,6 +5,7 @@ export interface QuestionRendererProps<T extends ClientQuestion = ClientQuestion
   question: T;
   selectedAnswer?: number | boolean;
   onSelectAnswer: (answer: number | boolean) => void;
+  isDisabled?: boolean;
 }
 
 export type QuestionRendererComponent = (props: QuestionRendererProps) => ReactNode;
