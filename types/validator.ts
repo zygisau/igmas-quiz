@@ -6,43 +6,45 @@ import type { AppRoutes, LayoutRoutes, ParamMap } from "./routes.js"
 import type { ResolvingMetadata, ResolvingViewport } from "next/types.js"
 
 type AppPageConfig<Route extends AppRoutes = AppRoutes> = {
-  default: React.ComponentType<{ params: Promise<ParamMap[Route]> } & any> | ((props: { params: Promise<ParamMap[Route]> } & any) => React.ReactNode | Promise<React.ReactNode> | never | void | Promise<void>)
-  generateStaticParams?: (props: { params: ParamMap[Route] }) => Promise<any[]> | any[]
+  default: React.ComponentType<{ params: Promise<ParamMap[Route]> } & { searchParams: Promise<Record<string, string | string[] | undefined>> }> | ((props: { params: Promise<ParamMap[Route]> } & { searchParams: Promise<Record<string, string | string[] | undefined>> }) => React.ReactNode | Promise<React.ReactNode> | never | void | Promise<void>)
+  generateStaticParams?: (props: { params: ParamMap[Route] }) => Promise<unknown[]> | unknown[]
   generateMetadata?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
+    props: { params: Promise<ParamMap[Route]> } & { searchParams: Promise<Record<string, string | string[] | undefined>> },
     parent: ResolvingMetadata
-  ) => Promise<any> | any
+  ) => Promise<unknown> | unknown
   generateViewport?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
+    props: { params: Promise<ParamMap[Route]> } & { searchParams: Promise<Record<string, string | string[] | undefined>> },
     parent: ResolvingViewport
-  ) => Promise<any> | any
-  metadata?: any
-  viewport?: any
+  ) => Promise<unknown> | unknown
+  metadata?: unknown
+  viewport?: unknown
 }
 
 type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   default: React.ComponentType<LayoutProps<Route>> | ((props: LayoutProps<Route>) => React.ReactNode | Promise<React.ReactNode> | never | void | Promise<void>)
-  generateStaticParams?: (props: { params: ParamMap[Route] }) => Promise<any[]> | any[]
+  generateStaticParams?: (props: { params: ParamMap[Route] }) => Promise<unknown[]> | unknown[]
   generateMetadata?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
+    props: { params: Promise<ParamMap[Route]> } & { searchParams: Promise<Record<string, string | string[] | undefined>> },
     parent: ResolvingMetadata
-  ) => Promise<any> | any
+  ) => Promise<unknown> | unknown
   generateViewport?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
+    props: { params: Promise<ParamMap[Route]> } & { searchParams: Promise<Record<string, string | string[] | undefined>> },
     parent: ResolvingViewport
-  ) => Promise<any> | any
-  metadata?: any
-  viewport?: any
+  ) => Promise<unknown> | unknown
+  metadata?: unknown
+  viewport?: unknown
 }
 
 
 // Validate ../../app/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
-  const handler = {} as typeof import("../../app/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handler = {} as typeof import("../../app/page.js")
+  type __Check = __IsExpected<typeof _handler>
+  // @ts-expect-error - This is intentionally unused for type checking
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Unused = __Check
 }
 
 
@@ -54,8 +56,9 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
 // Validate ../../app/layout.tsx
 {
   type __IsExpected<Specific extends LayoutConfig<"/">> = Specific
-  const handler = {} as typeof import("../../app/layout.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handler = {} as typeof import("../../app/layout.js")
+  type __Check = __IsExpected<typeof _handler>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Unused = __Check
 }

@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 
 export interface QuestionRendererProps<T extends Question = Question> {
   question: T;
-  selectedAnswer?: any;
-  onSelectAnswer: (answer: any) => void;
+  selectedAnswer?: number | boolean;
+  onSelectAnswer: (answer: number | boolean) => void;
 }
 
 export type QuestionRendererComponent = (props: QuestionRendererProps) => ReactNode;

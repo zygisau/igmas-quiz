@@ -2,7 +2,6 @@ import { TrueFalseQuestion as TrueFalseQuestionType } from "@/types/quiz";
 import { QuestionRendererProps } from "./QuestionRenderer";
 
 export const TrueFalseQuestion = ({
-  question,
   selectedAnswer,
   onSelectAnswer,
 }: QuestionRendererProps<TrueFalseQuestionType>) => {
