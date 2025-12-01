@@ -16,7 +16,7 @@
       "id": 2,
       "question": "Ką tokio simpatiško pamatė šis vyras?",
       "type": "image-multiple-choice",
-      "imageUrl": "/mazetis.jpg",
+      "imageUrl": "/images/mazetis.jpg",
       "options": [
         "Miliauskaitės pėdkelnes",
         "Simpatiškas eilutes",
@@ -44,36 +44,47 @@
     },
     {
       "id": 5,
-      "question": "What do you call a bear with no teeth?",
-      "type": "multiple-choice",
-      "options": [
-        "A teddy bear",
-        "A gummy bear",
-        "A grumpy bear",
-        "A confused bear"
-      ],
-      "correctAnswer": 1
+      "question": "Xujovas audijo, išjunk dwj Ignelio audyju prašau",
+      "type": "volume-slider"
     },
     {
       "id": 6,
-      "question": "JavaScript and Java are the same programming language.",
-      "type": "true-false",
-      "correctAnswer": false
+      "question": "Kokiame lane žaidžia geriausias loleris Igmasxxx",
+      "type": "multiple-choice",
+      "options": [
+        "Top",
+        "Bottom",
+        "Bottom bet gay",
+        "Mid"
+      ],
+      "correctAnswer": 3
     },
     {
       "id": 7,
-      "question": "If you could only eat one food forever, which would make you regret it fastest?",
+      "question": "new Date(\"0\")",
       "type": "multiple-choice",
       "options": [
-        "Pizza",
-        "Ice cream",
-        "Brussels sprouts",
-        "Ghost peppers"
+        "Mes errora bl",
+        "Invalidumo data",
+        "2000-01-01T00:00:00.000Z",
+        "1970-01-01T00:00:00.000Z"
       ],
       "correctAnswer": 3
     },
     {
       "id": 8,
+      "question": "Kuo susirgo Ignas Tailande?",
+      "type": "multiple-choice",
+      "options": [
+        "Kažkas su žarnynu",
+        "Homoseksualumu",
+        "Ligma",
+        "Snarglio vėžiu"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 9,
       "question": "What's the best way to study for a test?",
       "type": "multiple-choice",
       "options": [

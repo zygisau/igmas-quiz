@@ -4,36 +4,23 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
 import Image from "next/image";
 import { AudioDenialPage } from "./AudioDenialPage";
+import { z } from "zod";
 
-export const BackgroundMusic = () => {
+// Zod schema for volume state
+export const volumeSchema = z.object({
+  volume: z.number().min(0).max(100),
+});
+
+export type VolumeState = z.infer<typeof volumeSchema>;
+
+// Audio management hook
+export const useAudioManagement = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const spookAudioRef = useRef<HTMLAudioElement>(null);
   const [volume, setVolume] = useState(100);
-  const [showSlider, setShowSlider] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [shake, setShake] = useState(false);
-  const [audioDenied, setAudioDenied] = useState(false);
   const [showSpook, setShowSpook] = useState(false);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-      audioRef.current.loop = true;
-      audioRef.current.play().catch((error) => {
-        console.error("Failed to play background music:", error);
-        // Check if the error is due to user denying audio
-        if (error.name === "NotAllowedError" || error.name === "NotSupportedError") {
-          setAudioDenied(true);
-        }
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-    }
-  }, [volume]);
 
   const handleVolumeChange = (newVolume: number) => {
     if (newVolume === 0) {
@@ -67,6 +54,51 @@ export const BackgroundMusic = () => {
       setVolume(newVolume);
     }
   };
+
+  return {
+    audioRef,
+    spookAudioRef,
+    volume,
+    setVolume,
+    showPopover,
+    shake,
+    showSpook,
+    handleVolumeChange,
+  };
+};
+
+export const BackgroundMusic = () => {
+  const {
+    audioRef,
+    spookAudioRef,
+    volume,
+    showPopover,
+    shake,
+    showSpook,
+    handleVolumeChange,
+  } = useAudioManagement();
+  const [showSlider, setShowSlider] = useState(false);
+  const [audioDenied, setAudioDenied] = useState(false);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+      audioRef.current.loop = true;
+      audioRef.current.play().catch((error) => {
+        console.error("Failed to play background music:", error);
+        // Check if the error is due to user denying audio
+        if (error.name === "NotAllowedError" || error.name === "NotSupportedError") {
+          setAudioDenied(true);
+        }
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
 
   if (audioDenied) {
     return <AudioDenialPage />;
