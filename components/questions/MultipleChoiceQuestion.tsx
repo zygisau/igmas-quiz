@@ -1,11 +1,11 @@
-import { MultipleChoiceQuestion as MultipleChoiceQuestionType } from "@/types/quiz";
+import { ClientMultipleChoiceQuestion } from "@/types/quiz";
 import { QuestionRendererProps } from "./QuestionRenderer";
 
 export const MultipleChoiceQuestion = ({
   question,
   selectedAnswer,
   onSelectAnswer,
-}: QuestionRendererProps<MultipleChoiceQuestionType>) => {
+}: QuestionRendererProps<ClientMultipleChoiceQuestion>) => {
   return (
     <div className="space-y-4">
       {question.options.map((option, index) => (

@@ -1,53 +1,134 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { QuizCard } from "@/components/QuizCard";
 import { QuizResults } from "@/components/QuizResults";
-import { Question } from "@/types/quiz";
-import quizData from "@/data/quiz-questions.json";
+import { ClientQuestion, QuizMetadata } from "@/types/quiz";
 
 type Answer = number | boolean;
 
+interface AnswerRecord {
+  questionId: number;
+  answer: Answer;
+  isCorrect: boolean;
+}
+
 export default function Home() {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Answer[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState<ClientQuestion | null>(null);
+  const [questionIds, setQuestionIds] = useState<number[]>([]);
+  const [answerRecords, setAnswerRecords] = useState<AnswerRecord[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<Answer | undefined>(undefined);
   const [showResults, setShowResults] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [validating, setValidating] = useState(false);
 
-  const quizQuestions = quizData.questions as Question[];
+  // Fetch quiz metadata on mount
+  useEffect(() => {
+    async function fetchQuizMetadata() {
+      try {
+        const response = await fetch('/api/quiz');
+        const metadata: QuizMetadata = await response.json();
+        setQuestionIds(metadata.questionIds);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch quiz metadata:', error);
+        setLoading(false);
+      }
+    }
+    fetchQuizMetadata();
+  }, []);
 
-  const handleAnswer = (answer: Answer) => {
-    const newAnswers = [...selectedAnswers];
-    newAnswers[currentQuestion] = answer;
-    setSelectedAnswers(newAnswers);
+  // Fetch current question when question index changes
+  useEffect(() => {
+    if (questionIds.length === 0) return;
+
+    async function fetchQuestion() {
+      try {
+        const questionId = questionIds[currentQuestionIndex];
+        const response = await fetch(`/api/questions/${questionId}`);
+        const question: ClientQuestion = await response.json();
+        setCurrentQuestion(question);
+
+        // Check if we already have an answer for this question
+        const existingRecord = answerRecords.find(r => r.questionId === questionId);
+        setSelectedAnswer(existingRecord?.answer);
+      } catch (error) {
+        console.error('Failed to fetch question:', error);
+      }
+    }
+    fetchQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestionIndex, questionIds]);
+
+  const handleAnswer = async (answer: Answer) => {
+    if (!currentQuestion || validating) return;
+
+    setSelectedAnswer(answer);
   };
 
-  const handleNext = () => {
-    if (currentQuestion < quizQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      setShowResults(true);
+  const handleNext = async () => {
+    if (!currentQuestion || selectedAnswer === undefined || validating) return;
+
+    setValidating(true);
+
+    try {
+      // Validate answer with server
+      const response = await fetch('/api/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questionId: currentQuestion.id,
+          answer: selectedAnswer,
+        }),
+      });
+
+      const validation = await response.json();
+
+      // Store the answer record
+      const newRecord: AnswerRecord = {
+        questionId: currentQuestion.id,
+        answer: selectedAnswer,
+        isCorrect: validation.isCorrect,
+      };
+
+      setAnswerRecords(prev => {
+        const filtered = prev.filter(r => r.questionId !== currentQuestion.id);
+        return [...filtered, newRecord];
+      });
+
+      // Move to next question or show results
+      if (currentQuestionIndex < questionIds.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedAnswer(undefined);
+      } else {
+        setShowResults(true);
+      }
+    } catch (error) {
+      console.error('Failed to validate answer:', error);
+    } finally {
+      setValidating(false);
     }
   };
 
   const handleRestart = () => {
-    setCurrentQuestion(0);
-    setSelectedAnswers([]);
+    setCurrentQuestionIndex(0);
+    setAnswerRecords([]);
+    setSelectedAnswer(undefined);
     setShowResults(false);
   };
 
   const calculateScore = () => {
-    return selectedAnswers.reduce((score, answer, index) => {
-      const question = quizQuestions[index];
-
-      if (question.type === 'multiple-choice' && typeof answer === 'number') {
-        return answer === question.correctAnswer ? score + 1 : score;
-      } else if (question.type === 'true-false' && typeof answer === 'boolean') {
-        return answer === question.correctAnswer ? score + 1 : score;
-      }
-
-      return score;
-    }, 0);
+    return answerRecords.filter(r => r.isCorrect).length;
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="text-2xl font-marker">Loading quiz...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 overflow-hidden relative">
@@ -59,22 +140,23 @@ export default function Home() {
 
       {/* Main content */}
       <div className="w-full max-w-2xl animate-sway">
-        {!showResults ? (
+        {!showResults && currentQuestion ? (
           <QuizCard
-            question={quizQuestions[currentQuestion]}
-            questionNumber={currentQuestion + 1}
-            totalQuestions={quizQuestions.length}
-            selectedAnswer={selectedAnswers[currentQuestion]}
+            question={currentQuestion}
+            questionNumber={currentQuestionIndex + 1}
+            totalQuestions={questionIds.length}
+            selectedAnswer={selectedAnswer}
             onSelectAnswer={handleAnswer}
             onNext={handleNext}
+            isValidating={validating}
           />
-        ) : (
+        ) : showResults ? (
           <QuizResults
             score={calculateScore()}
-            totalQuestions={quizQuestions.length}
+            totalQuestions={questionIds.length}
             onRestart={handleRestart}
           />
-        )}
+        ) : null}
       </div>
     </div>
   );

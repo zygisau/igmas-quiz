@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Question } from "@/types/quiz";
+import { ClientQuestion } from "@/types/quiz";
 import { getQuestionRenderer } from "@/components/questions/questionFactory";
 
 type Answer = number | boolean;
 
 interface QuizCardProps {
-  question: Question;
+  question: ClientQuestion;
   questionNumber: number;
   totalQuestions: number;
   selectedAnswer?: Answer;
   onSelectAnswer: (answer: Answer) => void;
   onNext: () => void;
+  isValidating?: boolean;
 }
 
 export const QuizCard = ({
@@ -20,6 +21,7 @@ export const QuizCard = ({
   selectedAnswer,
   onSelectAnswer,
   onNext,
+  isValidating = false,
 }: QuizCardProps) => {
   const renderQuestion = () => {
     const QuestionComponent = getQuestionRenderer(question);
@@ -57,10 +59,14 @@ export const QuizCard = ({
       <div className="flex justify-center">
         <Button
           onClick={onNext}
-          disabled={selectedAnswer === undefined}
+          disabled={selectedAnswer === undefined || isValidating}
           className="sketch-border bg-accent hover:bg-accent/80 text-accent-foreground font-sketch text-xl px-8 py-6 animate-wobble disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {questionNumber === totalQuestions ? "See Results!" : "Next →"}
+          {isValidating
+            ? "Checking..."
+            : questionNumber === totalQuestions
+              ? "See Results!"
+              : "Next →"}
         </Button>
       </div>
     </div>

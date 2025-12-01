@@ -1,10 +1,10 @@
-import { TrueFalseQuestion as TrueFalseQuestionType } from "@/types/quiz";
+import { ClientTrueFalseQuestion } from "@/types/quiz";
 import { QuestionRendererProps } from "./QuestionRenderer";
 
 export const TrueFalseQuestion = ({
   selectedAnswer,
   onSelectAnswer,
-}: QuestionRendererProps<TrueFalseQuestionType>) => {
+}: QuestionRendererProps<ClientTrueFalseQuestion>) => {
   const options = [
     { label: "True", value: true },
     { label: "False", value: false },
