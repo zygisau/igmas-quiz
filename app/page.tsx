@@ -3,54 +3,21 @@
 import { useState } from "react";
 import { QuizCard } from "@/components/QuizCard";
 import { QuizResults } from "@/components/QuizResults";
+import { Question } from "@/types/quiz";
+import quizData from "@/data/quiz-questions.json";
 
-// Sample quiz data
-const quizQuestions = [
-  {
-    id: 1,
-    question: "What's the capital of the Moon?",
-    options: ["Cheese City", "Crater Town", "Luna Landing", "Moon Base Alpha"],
-    correctAnswer: 0,
-  },
-  {
-    id: 2,
-    question: "How many fingers does a cartoon character usually have?",
-    options: ["Three", "Four", "Five", "It depends on the artist's mood"],
-    correctAnswer: 1,
-  },
-  {
-    id: 3,
-    question: "What do you call a bear with no teeth?",
-    options: ["A teddy bear", "A gummy bear", "A grumpy bear", "A confused bear"],
-    correctAnswer: 1,
-  },
-  {
-    id: 4,
-    question: "If you could only eat one food forever, which would make you regret it fastest?",
-    options: ["Pizza", "Ice cream", "Brussels sprouts", "Ghost peppers"],
-    correctAnswer: 3,
-  },
-  {
-    id: 5,
-    question: "What's the best way to study for a test?",
-    options: [
-      "Actually study",
-      "Hope for a miracle",
-      "Panic at 3 AM",
-      "All of the above",
-    ],
-    correctAnswer: 3,
-  },
-];
+type Answer = number | boolean;
 
 export default function Home() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [selectedAnswers, setSelectedAnswers] = useState<Answer[]>([]);
   const [showResults, setShowResults] = useState(false);
 
-  const handleAnswer = (answerIndex: number) => {
+  const quizQuestions = quizData.questions as Question[];
+
+  const handleAnswer = (answer: Answer) => {
     const newAnswers = [...selectedAnswers];
-    newAnswers[currentQuestion] = answerIndex;
+    newAnswers[currentQuestion] = answer;
     setSelectedAnswers(newAnswers);
   };
 
@@ -70,7 +37,15 @@ export default function Home() {
 
   const calculateScore = () => {
     return selectedAnswers.reduce((score, answer, index) => {
-      return answer === quizQuestions[index].correctAnswer ? score + 1 : score;
+      const question = quizQuestions[index];
+
+      if (question.type === 'multiple-choice' && typeof answer === 'number') {
+        return answer === question.correctAnswer ? score + 1 : score;
+      } else if (question.type === 'true-false' && typeof answer === 'boolean') {
+        return answer === question.correctAnswer ? score + 1 : score;
+      }
+
+      return score;
     }, 0);
   };
 

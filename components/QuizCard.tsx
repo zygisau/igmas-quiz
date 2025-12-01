@@ -1,18 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { Question } from "@/types/quiz";
+import { getQuestionRenderer } from "@/components/questions/questionFactory";
 
-interface Question {
-  id: number;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-}
+type Answer = number | boolean;
 
 interface QuizCardProps {
   question: Question;
   questionNumber: number;
   totalQuestions: number;
-  selectedAnswer?: number;
-  onSelectAnswer: (index: number) => void;
+  selectedAnswer?: Answer;
+  onSelectAnswer: (answer: Answer) => void;
   onNext: () => void;
 }
 
@@ -24,6 +21,17 @@ export const QuizCard = ({
   onSelectAnswer,
   onNext,
 }: QuizCardProps) => {
+  const renderQuestion = () => {
+    const QuestionComponent = getQuestionRenderer(question);
+    return (
+      <QuestionComponent
+        question={question}
+        selectedAnswer={selectedAnswer}
+        onSelectAnswer={onSelectAnswer}
+      />
+    );
+  };
+
   return (
     <div className="sketch-border bg-card p-8 animate-float">
       {/* Question counter */}
@@ -40,48 +48,9 @@ export const QuizCard = ({
         </h2>
       </div>
 
-      {/* Options */}
-      <div className="space-y-4 mb-8">
-        {question.options.map((option, index) => (
-          <button
-            key={index}
-            onClick={() => onSelectAnswer(index)}
-            className={`
-              w-full sketch-border p-4 text-left font-handwriting text-lg
-              transition-all duration-200 animate-float-delayed-2
-              hover:bg-secondary hover:scale-105
-              ${
-                selectedAnswer === index
-                  ? "bg-primary text-primary-foreground scale-105"
-                  : "bg-card text-foreground"
-              }
-            `}
-            style={{
-              animationDelay: `${index * 0.2}s`,
-            }}
-          >
-            <div className="flex items-start gap-4">
-              {/* Custom checkbox */}
-              <div
-                className={`
-                  w-8 h-8 flex-shrink-0 sketch-border flex items-center justify-center
-                  ${
-                    selectedAnswer === index
-                      ? "bg-primary-foreground"
-                      : "bg-background"
-                  }
-                `}
-              >
-                {selectedAnswer === index && (
-                  <span className="text-2xl font-sketch text-primary animate-wobble">
-                    ✓
-                  </span>
-                )}
-              </div>
-              <span className="flex-1 pt-1">{option}</span>
-            </div>
-          </button>
-        ))}
+      {/* Question component based on type */}
+      <div className="mb-8">
+        {renderQuestion()}
       </div>
 
       {/* Next button */}

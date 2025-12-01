@@ -1,0 +1,62 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "What's the capital of the Moon?",
+      "type": "multiple-choice",
+      "options": ["Cheese City", "Crater Town", "Luna Landing", "Moon Base Alpha"],
+      "correctAnswer": 0
+    },
+    {
+      "id": 2,
+      "question": "Is TypeScript a superset of JavaScript?",
+      "type": "true-false",
+      "correctAnswer": true
+    },
+    {
+      "id": 3,
+      "question": "How many fingers does a cartoon character usually have?",
+      "type": "multiple-choice",
+      "options": ["Three", "Four", "Five", "It depends on the artist's mood"],
+      "correctAnswer": 1
+    },
+    {
+      "id": 4,
+      "question": "React is a JavaScript library for building user interfaces.",
+      "type": "true-false",
+      "correctAnswer": true
+    },
+    {
+      "id": 5,
+      "question": "What do you call a bear with no teeth?",
+      "type": "multiple-choice",
+      "options": ["A teddy bear", "A gummy bear", "A grumpy bear", "A confused bear"],
+      "correctAnswer": 1
+    },
+    {
+      "id": 6,
+      "question": "JavaScript and Java are the same programming language.",
+      "type": "true-false",
+      "correctAnswer": false
+    },
+    {
+      "id": 7,
+      "question": "If you could only eat one food forever, which would make you regret it fastest?",
+      "type": "multiple-choice",
+      "options": ["Pizza", "Ice cream", "Brussels sprouts", "Ghost peppers"],
+      "correctAnswer": 3
+    },
+    {
+      "id": 8,
+      "question": "What's the best way to study for a test?",
+      "type": "multiple-choice",
+      "options": [
+        "Actually study",
+        "Hope for a miracle",
+        "Panic at 3 AM",
+        "All of the above"
+      ],
+      "correctAnswer": 3
+    }
+  ]
+}
