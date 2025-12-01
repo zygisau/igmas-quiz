@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { QuizCard } from "@/components/QuizCard";
 import { QuizResults } from "@/components/QuizResults";
 import { ClientQuestion, QuizMetadata } from "@/types/quiz";
@@ -147,10 +148,18 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 overflow-hidden relative">
       {/* Floating background elements */}
-      <div className="absolute top-10 left-10 w-20 h-20 border-4 border-primary/30 rounded-full animate-float" />
-      <div className="absolute top-40 right-20 w-16 h-16 border-4 border-accent/30 animate-float-delayed transform rotate-45" />
-      <div className="absolute bottom-20 left-1/4 w-24 h-24 border-4 border-muted-foreground/20 rounded-full animate-float-delayed-2" />
-      <div className="absolute bottom-40 right-1/3 w-12 h-12 border-4 border-primary/20 animate-wobble transform rotate-12" />
+      <div className="absolute top-10 left-10 w-32 h-32 opacity-20 animate-float">
+        <Image src="/ignas.png" alt="" width={128} height={128} className="w-full h-full object-contain" />
+      </div>
+      <div className="absolute top-40 right-20 w-40 h-40 opacity-15 animate-float-delayed transform rotate-12">
+        <Image src="/mazetis.png" alt="" width={160} height={160} className="w-full h-full object-contain" />
+      </div>
+      <div className="absolute bottom-20 left-1/4 w-28 h-28 opacity-20 animate-float-delayed-2 transform -rotate-12">
+        <Image src="/ignas.png" alt="" width={112} height={112} className="w-full h-full object-contain" />
+      </div>
+      <div className="absolute bottom-40 right-1/3 w-36 h-36 opacity-15 animate-wobble transform rotate-45">
+        <Image src="/mazetis.png" alt="" width={144} height={144} className="w-full h-full object-contain" />
+      </div>
 
       {/* Main content */}
       <div className="w-full max-w-2xl animate-sway">
