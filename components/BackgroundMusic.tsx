@@ -27,31 +27,35 @@ export const useAudioManagement = () => {
   const handleVolumeChange = (newVolume: number) => {
     if (newVolume === 0) {
       // User tried to mute - trigger spook!
+      // Set spook state immediately and synchronously
+      setShowSpook(true);
       setShake(true);
       setShowPopover(true);
-      setShowSpook(true);
       setVolume(100);
 
-      // Play spook audio
-      if (spookAudioRef.current) {
-        spookAudioRef.current.currentTime = 0;
-        spookAudioRef.current.play().catch((error) => {
-          console.error("Failed to play spook audio:", error);
-        });
-      }
+      // Use requestAnimationFrame to ensure state is set before playing audio
+      requestAnimationFrame(() => {
+        // Play spook audio
+        if (spookAudioRef.current) {
+          spookAudioRef.current.currentTime = 0;
+          spookAudioRef.current.play().catch((error) => {
+            console.error("Failed to play spook audio:", error);
+          });
+        }
 
-      setTimeout(() => {
-        setShake(false);
-      }, 500);
+        setTimeout(() => {
+          setShake(false);
+        }, 500);
 
-      setTimeout(() => {
-        setShowPopover(false);
-      }, 2000);
+        setTimeout(() => {
+          setShowPopover(false);
+        }, 2000);
 
-      // Hide spook image after 3 seconds
-      setTimeout(() => {
-        setShowSpook(false);
-      }, 3000);
+        // Hide spook image after 3 seconds
+        setTimeout(() => {
+          setShowSpook(false);
+        }, 3000);
+      });
     } else {
       setVolume(newVolume);
     }

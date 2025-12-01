@@ -75,14 +75,15 @@ export const VolumeSliderQuestion = ({
       </div>
 
       {/* Spook Image Overlay */}
-      {typeof document !== 'undefined' && showSpook && createPortal(
-        <div className="fixed inset-0 z-[100] animate-shake">
+      {showSpook && typeof document !== 'undefined' && document.body && createPortal(
+        <div className="fixed inset-0 z-[100] animate-shake" style={{ pointerEvents: 'none' }}>
           <Image
             src="/spook.webp"
             alt="Spook"
             fill
             className="object-cover"
             priority
+            unoptimized
           />
         </div>,
         document.body

@@ -50,7 +50,7 @@
     },
     {
       "id": 6,
-      "question": "Kokiame lane žaidžia geriausias loleris Igmasxxx",
+      "question": "Kokiame lane žaidžia geriausias loleris Igmasxxx?",
       "type": "multiple-choice",
       "options": [
         "Top",
@@ -86,7 +86,7 @@
     },
     {
       "id": 9,
-      "question": "Kieno šiandien gimtadienis",
+      "question": "Kieno šiandien gimtadienis?",
       "type": "multiple-choice",
       "options": [
         "Igno",
