@@ -20,8 +20,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sketch: ['Permanent Marker', 'cursive'],
-        handwriting: ['Indie Flower', 'cursive'],
+        sketch: ['var(--font-sketch)', 'cursive'],
+        handwriting: ['var(--font-handwriting)', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",

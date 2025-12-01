@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { Permanent_Marker, Indie_Flower } from "next/font/google";
+import { Caveat, Patrick_Hand } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { BackgroundMusic } from "@/components/BackgroundMusic";
 
-const permanentMarker = Permanent_Marker({
+const patrickHand = Patrick_Hand({
   weight: "400",
   variable: "--font-sketch",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
-const indieFlower = Indie_Flower({
-  weight: "400",
+const caveat = Caveat({
+  weight: ["400", "700"],
   variable: "--font-handwriting",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
 export const metadata: Metadata = {
@@ -28,9 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${permanentMarker.variable} ${indieFlower.variable} antialiased`}
+        className={`${patrickHand.variable} ${caveat.variable} antialiased`}
       >
         <Providers>{children}</Providers>
+        <BackgroundMusic />
       </body>
     </html>
   );
