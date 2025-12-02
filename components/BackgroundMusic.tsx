@@ -96,7 +96,7 @@ export const BackgroundMusic = () => {
       ) || window.innerWidth < 768;
       setIsMobile(isMobileDevice);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -114,13 +114,13 @@ export const BackgroundMusic = () => {
     if (!isMobile && audioRef.current) {
       const currentSrc = audioRef.current.src;
       const expectedSrc = typeof window !== 'undefined' ? `${window.location.origin}${audioSource}` : audioSource;
-      
+
       if (!currentSrc || !currentSrc.includes(audioSource) || audioRef.current.paused) {
         audioRef.current.volume = volume / 100;
         audioRef.current.loop = true;
         audioRef.current.src = audioSource;
         setCurrentAudioSource(audioSource);
-        
+
         const playAudio = () => {
           audioRef.current?.play().catch((error) => {
             console.error("Failed to play background music:", error);
@@ -130,7 +130,7 @@ export const BackgroundMusic = () => {
             }
           });
         };
-        
+
         audioRef.current.addEventListener('loadeddata', playAudio, { once: true });
         audioRef.current.load();
       }
@@ -142,13 +142,13 @@ export const BackgroundMusic = () => {
       audioRef.current.src = audioSource;
       audioRef.current.loop = true;
       setCurrentAudioSource(audioSource);
-      
+
       const playAudio = () => {
         audioRef.current?.play().catch((error) => {
           console.error("Failed to play background music:", error);
         });
       };
-      
+
       audioRef.current.addEventListener('loadeddata', playAudio, { once: true });
       audioRef.current.load();
     }
@@ -217,11 +217,11 @@ export const BackgroundMusic = () => {
       {showSpook && (
         <div className="fixed inset-0 z-[100] animate-shake">
           <Image
-            src="/spook.webp"
+            src="/spook.png"
             alt="Spook"
             fill
             className="object-cover"
-            priority
+            preload
           />
         </div>
       )}

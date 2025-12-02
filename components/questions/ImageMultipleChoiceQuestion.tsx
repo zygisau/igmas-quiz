@@ -18,8 +18,7 @@ export const ImageMultipleChoiceQuestion = ({
             alt={question.question}
             fill
             className="object-contain"
-            priority
-          />
+            preload />
         </div>
       </div>
 
@@ -34,10 +33,9 @@ export const ImageMultipleChoiceQuestion = ({
               w-full sketch-border p-4 text-left font-handwriting text-lg
               transition-all duration-200 animate-float-delayed-2
               ${!isDisabled && "hover:bg-secondary hover:scale-105"}
-              ${
-                selectedAnswer === index
-                  ? "bg-primary text-primary-foreground scale-105"
-                  : "bg-card text-foreground"
+              ${selectedAnswer === index
+                ? "bg-primary text-primary-foreground scale-105"
+                : "bg-card text-foreground"
               }
               ${isDisabled && "opacity-60 cursor-not-allowed"}
             `}
@@ -50,10 +48,9 @@ export const ImageMultipleChoiceQuestion = ({
               <div
                 className={`
                   w-8 h-8 flex-shrink-0 sketch-border flex items-center justify-center
-                  ${
-                    selectedAnswer === index
-                      ? "bg-primary-foreground"
-                      : "bg-background"
+                  ${selectedAnswer === index
+                    ? "bg-primary-foreground"
+                    : "bg-background"
                   }
                 `}
               >

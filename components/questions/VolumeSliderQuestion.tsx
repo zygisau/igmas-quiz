@@ -78,12 +78,11 @@ export const VolumeSliderQuestion = ({
       {showSpook && typeof document !== 'undefined' && document.body && createPortal(
         <div className="fixed inset-0 z-[100] animate-shake" style={{ pointerEvents: 'none' }}>
           <Image
-            src="/spook.webp"
+            src="/spook.png"
             alt="Spook"
             fill
             className="object-cover"
-            priority
-            unoptimized
+            preload
           />
         </div>,
         document.body
